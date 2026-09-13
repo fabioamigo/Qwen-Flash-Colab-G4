@@ -11,7 +11,7 @@ This repository provides a Colab bootstrap notebook. The inference implementatio
 1. Download `Qwen38_FlashNext_NVFP4_FRSpec_Cloudflare.ipynb` from this repository and upload it to [Google Colab](https://colab.research.google.com/). Alternatively, use Colab's GitHub tab with this repository's URL.
 2. Select a **G4 runtime with an NVIDIA RTX PRO 6000 Blackwell Server Edition, 96 GB VRAM, 48 logical CPUs, and high host RAM**. The notebook checks the actual GPU, rather than trusting the runtime label. T4, L4, A100, and H100 are not substitutes for this SM120 recipe.
 3. Run all cells. The first code cell optionally accepts a Hugging Face read token through a hidden prompt. Press Enter to continue anonymously. You can create a token at [Hugging Face Access Tokens](https://huggingface.co/settings/tokens).
-4. Wait for installation, checkpoint download, model loading, kernel compilation, autotuning, and warmup. Logs and periodic progress messages remain visible.
+4. **Allow more than 30 minutes for the server to become ready on a fresh Google Colab G4 instance.** Installation, checkpoint download, model loading, kernel compilation, autotuning, and warmup all contribute to the wait. Logs and periodic progress messages remain visible.
 5. The publication cell reports success only after checking the public model list, rejection of missing/incorrect API keys, and a short generation through the public URL.
 6. Copy the printed base URL, API key, and curl example into your client.
 7. Use the final **Encerrar API** button to stop both processes. Running all cells only displays the controls; it does not automatically shut down the API.
@@ -128,7 +128,19 @@ The observed startup log included warnings about the derived 262,144-token conte
 
 That earlier logged startup took approximately 30 minutes from the first timestamp to application readiness: about 16 minutes loading target/MTP weights and 13 minutes in the initial FlashInfer autotune context, which can also trigger compilation. Do not interpret all of that interval as CPU compilation.
 
-The current 48-job / 32-download / 24-loader profile and optional-token addition have been statically checked, but a complete fresh-Colab run of the final combination has not been confirmed. No startup-time guarantee is made.
+The repository owner has reported successful startup of the published version with the 48-job / 32-download / 24-loader profile. Plan for **more than 30 minutes before the server is ready on a fresh Google Colab G4 instance**; the total varies with downloads, compilation, and cache availability.
+
+## Code-generation performance and monitoring
+
+**Expected code-generation throughput on the Google Colab G4 runtime is more than 200 tokens per second**, based on the repository owner's reported expectation for this setup. Actual throughput varies with the workload, context length, concurrency, and speculative decoding acceptance; this is not a guaranteed minimum.
+
+To monitor the generation throughput reported by SGLang, open a **terminal inside the running Colab instance** and run:
+
+```bash
+watch -n 1 "tail -n 20 /content/pennyroyal-colab/logs/server.log | grep -oP 'gen throughput \(token/s\): \d+\.\d+'"
+```
+
+The command refreshes every second and extracts throughput values from the last 20 log lines. It may show multiple samples or no output if those lines contain no matching generation metric. Press Ctrl+C to stop monitoring. This is the server-reported generation metric, not end-to-end client latency or prompt-processing speed.
 
 ## Persistence and troubleshooting
 
