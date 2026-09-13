@@ -64,7 +64,7 @@ The model declares `reasoning_content` as its interleaved reasoning field. This 
 
 ## Context, output, and validation
 
-Both examples advertise the notebook's **524,288-token total context** and use a **32,768-token output ceiling** as a client configuration choice, not a claim about the model's maximum output capability. Prompt, tool definitions, conversation, and generated tokens must fit the total context together. If you change the server context, update both client configurations. Pi's zero cost entries represent no per-token API billing; they do not mean the Colab runtime is free.
+Both examples advertise the notebook's **524,288-token total context** and use a **131,072-token output ceiling** as a client configuration choice, not a claim about the model's maximum output capability. Prompt, tool definitions, conversation, and generated tokens must fit the total context together. If you change the server context, update both client configurations. Pi's zero cost entries represent no per-token API billing; they do not mean the Colab runtime is free.
 
 Text and image inputs are declared to match the notebook's multimodal setup. Actual vision, multi-turn reasoning replay, and tool execution still require end-to-end checks on the running server. These examples have been checked against current upstream configuration documentation and parsed as JSON; they have not been run against a live Colab endpoint. The notebook itself is unchanged by this addition.
 
