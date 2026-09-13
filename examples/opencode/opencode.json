@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "colab-g4/pennyroyal",
+  "small_model": "colab-g4/pennyroyal",
+  "provider": {
+    "colab-g4": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Colab G4 / Pennyroyal",
+      "options": {
+        "baseURL": "{env:COLAB_BASE_URL}",
+        "apiKey": "{env:COLAB_API_KEY}",
+        "timeout": 600000
+      },
+      "models": {
+        "pennyroyal": {
+          "name": "Qwen Flash-Next NVFP4 (Colab G4)",
+          "reasoning": true,
+          "tool_call": true,
+          "attachment": true,
+          "interleaved": { "field": "reasoning_content" },
+          "modalities": { "input": ["text", "image"], "output": ["text"] },
+          "limit": { "context": 524288, "output": 32768 }
+        }
+      }
+    }
+  }
+}
