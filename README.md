@@ -118,7 +118,7 @@ See [Pi and OpenCode setup](examples/README.md) for configuration files, environ
 - [Pi models.json](examples/pi/models.json)
 - [OpenCode opencode.json](examples/opencode/opencode.json)
 
-Both clients require an SSE-capable route to the server. The notebook's default Quick Tunnel does not officially support SSE; the guide explains this prerequisite. The examples use `pennyroyal`, a 524,288-token context, and a configurable 131,072-token output ceiling.
+Both clients require an SSE-capable route to the server. The notebook's default Quick Tunnel does not officially support SSE; the guide explains this prerequisite. The examples use `pennyroyal`, a 524,288-token context, and a configurable 131,072-token output ceiling. Both expose `off`, `medium`, and `xhigh` thinking levels and explicitly set temperature 1.0, top-p 0.95, top-k 20, presence penalty 0.0, and repetition penalty 1.0.
 
 ## Validation status and startup expectations
 
