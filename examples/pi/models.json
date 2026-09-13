@@ -1,0 +1,33 @@
+{
+  "providers": {
+    "colab-g4": {
+      "baseUrl": "https://YOUR-SSE-ENDPOINT.example.com/v1",
+      "api": "openai-completions",
+      "apiKey": "$COLAB_API_KEY",
+      "authHeader": true,
+      "compat": {
+        "supportsStore": false,
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false,
+        "maxTokensField": "max_tokens",
+        "thinkingFormat": "chat-template",
+        "chatTemplateKwargs": {
+          "enable_thinking": { "$var": "thinking.enabled" },
+          "preserve_thinking": true,
+          "reasoning_effort": { "$var": "thinking.effort" }
+        }
+      },
+      "models": [
+        {
+          "id": "pennyroyal",
+          "name": "Qwen Flash-Next NVFP4 (Colab G4)",
+          "reasoning": true,
+          "input": ["text", "image"],
+          "contextWindow": 524288,
+          "maxTokens": 32768,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        }
+      ]
+    }
+  }
+}
