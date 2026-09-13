@@ -111,6 +111,15 @@ This shell example is for Bash/Zsh on Linux/macOS; on Windows, use WSL or adapt 
 
 The API key is generated with `secrets.token_urlsafe(32)` whenever the server startup cell runs. It has no independent time-based expiry: stopping or replacing that server ends access to that running instance. The URL is temporary and depends on the tunnel process remaining alive.
 
+## Coding-agent examples
+
+See [Pi and OpenCode setup](examples/README.md) for configuration files, environment-based API credentials, and a streaming connection check:
+
+- [Pi models.json](examples/pi/models.json)
+- [OpenCode opencode.json](examples/opencode/opencode.json)
+
+Both clients require an SSE-capable route to the server. The notebook's default Quick Tunnel does not officially support SSE; the guide explains this prerequisite. The examples use `pennyroyal`, a 524,288-token context, and a configurable 32,768-token output ceiling.
+
 ## Validation status and startup expectations
 
 An earlier configuration was observed to complete local startup and return a short answer on the user's Colab GPU. Its log reported `context_len=524288` and an allocated 824,384-token KV pool. That is **not** a validation of output quality at 512K, all multimodal features, public streaming, or full cache restoration.
