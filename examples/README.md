@@ -46,7 +46,7 @@ Replace `baseUrl` with your actual SSE-capable base URL, including `/v1`. Pi's d
 pi --provider colab-g4 --model pennyroyal --thinking medium
 ```
 
-You can also select the provider/model with `/model`. Pi uses `system` messages and `max_tokens` for this server. The compatibility mapping sends thinking controls inside `chat_template_kwargs`, preserving thinking and mapping Pi's selected effort. No top-level OpenAI `reasoning_effort` is required. Start with `medium`; this example does not declare extra `xhigh` or `max` levels. Older Pi versions may require upgrading rather than accepting these newer fields silently.
+You can also select the provider/model with `/model`. Pi uses `system` messages and `max_tokens` for this server. The compatibility mapping sends thinking controls inside `chat_template_kwargs`, preserving thinking and mapping Pi's selected effort. No top-level OpenAI `reasoning_effort` is required. The selectable levels are `off`, `medium`, and `xhigh`; `minimal`, `low`, `high`, and `max` are disabled through `thinkingLevelMap`. Use `--thinking off`, `--thinking medium`, or `--thinking xhigh`. Older Pi versions may require upgrading rather than accepting these newer fields silently.
 
 ## OpenCode
 
@@ -60,7 +60,31 @@ opencode --model colab-g4/pennyroyal
 
 Alternatively, merge the example into your project's `opencode.json` or `~/.config/opencode/opencode.json`. OpenCode merges configuration sources, so existing project settings may override values. The example reads both `COLAB_BASE_URL` and `COLAB_API_KEY` from the environment. It uses `@ai-sdk/openai-compatible` for `/chat/completions` and selects the same Colab model for both normal and small-model tasks.
 
-The model declares `reasoning_content` as its interleaved reasoning field. This example relies on the notebook's default **thinking enabled, preserve thinking enabled, medium effort**. It does not promise that OpenCode's generic reasoning variants map to the custom Qwen chat template. The 600-second client timeout does not override tunnel or server timeouts.
+The model declares `reasoning_content` as its interleaved reasoning field. The example explicitly sends `chat_template_kwargs` and defaults to **medium** effort. Its `off`, `medium`, and `xhigh` variants override those kwargs; unwanted generic levels are disabled. Select a variant using OpenCode's `variant_cycle` keybinding. `off` sends `enable_thinking: false` and `reasoning_effort: "none"`; the other two send `enable_thinking: true` and the selected effort. All three retain `preserve_thinking: true`. The 600-second client timeout does not override tunnel or server timeouts.
+
+## Explicit sampling and thinking controls
+
+Both examples set the same sampling values for every thinking level:
+
+| API parameter | Value |
+| --- | ---: |
+| `temperature` | 1.0 |
+| `top_p` | 0.95 |
+| `top_k` | 20 |
+| `presence_penalty` | 0.0 |
+| `repetition_penalty` | 1.0 |
+
+Pi uses model-level `samplingParams`, which override Pi-generated request fields. OpenCode uses model-level `options` with the raw API field names. The inspected OpenAI-compatible adapter spreads these custom options into the request body after standardized sampling fields. Do not nest them under `samplingParams` or `extra_body` in OpenCode. Existing agent, plugin, or project overrides can still change the final request.
+
+| Selected level | `enable_thinking` | Template effort |
+| --- | --- | --- |
+| `off` | false | `none` |
+| `medium` | true | `medium` |
+| `xhigh` | true | `xhigh` |
+
+Both clients use `preserve_thinking: true` and send the controls inside `chat_template_kwargs`. The server/template determines the effect of these controls; `xhigh` is not a fixed thinking-token budget.
+
+OpenCode also sets `options.max_tokens: 131072` explicitly. Merely advertising `limit.output: 131072` does not eliminate the inspected OpenCode default output cap of 32,000 tokens. The custom body option overrides the adapter's standardized `max_tokens` value for this provider. This sets a request ceiling, not a requirement to generate that many tokens.
 
 ## Context, output, and validation
 
@@ -72,5 +96,6 @@ Text and image inputs are declared to match the notebook's multimodal setup. Act
 
 - [Pi](https://pi.dev/) and [earendil-works/pi custom models](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/models.md): provider configuration and thinking compatibility.
 - [OpenCode providers](https://opencode.ai/docs/providers/#custom-provider), [configuration](https://opencode.ai/docs/config/), and [configuration schema](https://opencode.ai/config.json): custom OpenAI-compatible providers, environment substitution, and model metadata.
+- [OpenCode request transforms](https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/provider/transform.ts) and [AI SDK OpenAI-compatible request construction](https://github.com/vercel/ai/blob/main/packages/openai-compatible/src/chat/openai-compatible-chat-language-model.ts): provider-option forwarding and output cap behavior.
 - [Cloudflare Quick Tunnels](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/do-more-with-tunnels/trycloudflare/): SSE transport limitation.
 - [Main README](../README.md#credits-and-inspiration): Pennyroyal, SGLang, RadixArk, FR-Spec, and the notebook's other upstream credits.
