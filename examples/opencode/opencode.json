@@ -19,7 +19,7 @@
           "attachment": true,
           "interleaved": { "field": "reasoning_content" },
           "modalities": { "input": ["text", "image"], "output": ["text"] },
-          "limit": { "context": 524288, "output": 32768 }
+          "limit": { "context": 524288, "output": 131072 }
         }
       }
     }
