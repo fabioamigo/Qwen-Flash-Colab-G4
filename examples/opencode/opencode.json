@@ -17,9 +17,73 @@
           "reasoning": true,
           "tool_call": true,
           "attachment": true,
-          "interleaved": { "field": "reasoning_content" },
-          "modalities": { "input": ["text", "image"], "output": ["text"] },
-          "limit": { "context": 524288, "output": 131072 }
+          "interleaved": {
+            "field": "reasoning_content"
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "limit": {
+            "context": 524288,
+            "output": 131072
+          },
+          "options": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "top_k": 20,
+            "presence_penalty": 0,
+            "repetition_penalty": 1,
+            "max_tokens": 131072,
+            "chat_template_kwargs": {
+              "enable_thinking": true,
+              "preserve_thinking": true,
+              "reasoning_effort": "medium"
+            }
+          },
+          "variants": {
+            "off": {
+              "chat_template_kwargs": {
+                "enable_thinking": false,
+                "preserve_thinking": true,
+                "reasoning_effort": "none"
+              }
+            },
+            "medium": {
+              "chat_template_kwargs": {
+                "enable_thinking": true,
+                "preserve_thinking": true,
+                "reasoning_effort": "medium"
+              }
+            },
+            "xhigh": {
+              "chat_template_kwargs": {
+                "enable_thinking": true,
+                "preserve_thinking": true,
+                "reasoning_effort": "xhigh"
+              }
+            },
+            "none": {
+              "disabled": true
+            },
+            "minimal": {
+              "disabled": true
+            },
+            "low": {
+              "disabled": true
+            },
+            "high": {
+              "disabled": true
+            },
+            "max": {
+              "disabled": true
+            }
+          }
         }
       }
     }
