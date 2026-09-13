@@ -12,9 +12,13 @@
         "maxTokensField": "max_tokens",
         "thinkingFormat": "chat-template",
         "chatTemplateKwargs": {
-          "enable_thinking": { "$var": "thinking.enabled" },
+          "enable_thinking": {
+            "$var": "thinking.enabled"
+          },
           "preserve_thinking": true,
-          "reasoning_effort": { "$var": "thinking.effort" }
+          "reasoning_effort": {
+            "$var": "thinking.effort"
+          }
         }
       },
       "models": [
@@ -22,10 +26,34 @@
           "id": "pennyroyal",
           "name": "Qwen Flash-Next NVFP4 (Colab G4)",
           "reasoning": true,
-          "input": ["text", "image"],
+          "input": [
+            "text",
+            "image"
+          ],
           "contextWindow": 524288,
           "maxTokens": 131072,
-          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "thinkingLevelMap": {
+            "off": "none",
+            "minimal": null,
+            "low": null,
+            "medium": "medium",
+            "high": null,
+            "xhigh": "xhigh",
+            "max": null
+          },
+          "samplingParams": {
+            "temperature": 1,
+            "top_p": 0.95,
+            "top_k": 20,
+            "presence_penalty": 0,
+            "repetition_penalty": 1
+          }
         }
       ]
     }
